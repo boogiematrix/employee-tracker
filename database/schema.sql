@@ -26,7 +26,7 @@ CREATE TABLE employee (
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     role_id INT NOT NULL,
-    manager_id INT NOT NULL,
+    manager_id INT,
     INDEX role_ind (role_id),
     INDEX manag_ind (manager_id),
     CONSTRAINT fkrole

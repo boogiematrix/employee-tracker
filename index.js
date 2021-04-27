@@ -68,7 +68,7 @@ function addDepartment() {
         ])
         .then((answer) => {
         
-            connection.query(''/*middleman insert into departments set ?*/, {
+            connection.query(middleMan.createDepartment(), {
                 name: answer.newDepartment
             })
             console.log('New department added')
@@ -96,7 +96,7 @@ function addRole() {
         ])
         .then((answer) => {
 
-            connection.query(''/*middleman insert into departments set ?*/, {
+            connection.query(middleMan.createRole(), {
                 title: answer.newDepartment,
                 salary: answer.salary,
                 department_id: answer.departmentId
@@ -131,7 +131,7 @@ function addEmployee() {
         ])
         .then((answer) => {
 
-            connection.query(''/*middleman insert into departments set ?*/, {
+            connection.query(middleMan.createEmployee(), {
                 first_name: answer.firstName,
                 last_name: answer.lastName,
                 role_id: answer.roleId,
@@ -142,15 +142,24 @@ function addEmployee() {
 };
 
 function viewDepartments() {
-
+    connection.query(middleMan.readDepartments(), (err, res) => {
+        if (err) throw err;
+        console.table(res)
+    })
 };
 
 function viewRoles() {
-
+    connection.query(middleMan.readRoles(), (err, res) => {
+        if (err) throw err;
+        console.table(res)
+    })
 };
 
 function viewEmployees() {
-
+    connection.query(middleMan.readEmployees(), (err, res) => {
+        if (err) throw err;
+        console.table(res)
+    })
 };
 
 function updateEmployeeRole() {

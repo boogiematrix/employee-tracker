@@ -1,4 +1,4 @@
-USE workforce
+USE workforce;
 
 INSERT INTO department (name)
 VALUES ('R&D'),
