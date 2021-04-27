@@ -31,31 +31,59 @@ function init() {
         .then((answer) => {
             switch (answer.action) {
                 case 'Add_department':
-                    //add deparment funciton
+                    addDepartment();
                     break;
                 case 'Add_role':
-                    //add role funciton
+                    addRole();
                     break;
                 case 'Add_employee':
-                    //add employee funciton
+                    addEmployee();
                     break;
                 case 'View_departments':
-                    //view deparment funciton
+                    viewDepartments();
                     break;
                 case 'View_roles':
-                    //view role funciton
+                    viewRoles();
                     break;
                 case 'View_employees':
-                    //view employees funciton
+                    viewEmployees();
                     break;
                 case 'Update_employee_role':
-                    //update employee role funciton
+                    updateEmployeeRole();
                     break;
                 default:
                     connection.end()
         }
     })
 }
+
+function addDepartment() {
+
+};
+
+function addRole() {
+
+};
+
+function addEmployee() {
+
+};
+
+function viewDepartments() {
+
+};
+
+function viewRoles() {
+
+};
+
+function viewEmployees() {
+
+};
+
+function updateEmployeeRole() {
+
+};
 
 
 connection.connect((err) => {
