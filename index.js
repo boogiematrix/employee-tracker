@@ -21,7 +21,7 @@ function init() {
                 type: 'list',
                 name: 'action',
                 message: 'What would you like to do with the workforce database?',
-                choices: ['Add_department', 'Add_role', 'Add_employee', 'View_departments', 'View_roles', 'View_employees', 'Update_employee_role']
+                choices: ['Add_department', 'Add_role', 'Add_employee', 'View_departments', 'View_roles', 'View_employees', 'Update_employee_role', 'Quit']
                 /*Update employee managers
                 View employees by manager
                 Delete departments, roles, and employees
@@ -51,8 +51,12 @@ function init() {
                 case 'Update_employee_role':
                     updateEmployeeRole();
                     break;
+                case 'Quit':
+                    connection.end();
+                    break;
                 default:
-                    connection.end()
+                    console.log('Invalid Choice');
+                    init()
         }
     })
 }
@@ -71,7 +75,8 @@ function addDepartment() {
             connection.query(middleMan.createDepartment(), {
                 name: answer.newDepartment
             })
-            console.log('New department added')
+            console.log('New department added');
+            init()
         })
 };
 
@@ -101,7 +106,8 @@ function addRole() {
                 salary: answer.salary,
                 department_id: answer.departmentId
             })
-            console.log('New role added')
+            console.log('New role added');
+            init()
         })
 };
 
@@ -137,33 +143,69 @@ function addEmployee() {
                 role_id: answer.roleId,
                 manager_id: answer.managerId
             })
-            console.log('New employee added')
+            console.log('New employee added');
+            init()
         })
 };
 
 function viewDepartments() {
     connection.query(middleMan.readDepartments(), (err, res) => {
         if (err) throw err;
-        console.table(res)
+        console.table(res);
+        init();
     })
 };
 
 function viewRoles() {
     connection.query(middleMan.readRoles(), (err, res) => {
         if (err) throw err;
-        console.table(res)
+        console.table(res);
+        init();
     })
 };
 
 function viewEmployees() {
     connection.query(middleMan.readEmployees(), (err, res) => {
         if (err) throw err;
-        console.table(res)
+        console.table(res);
+        init();
     })
 };
 
 function updateEmployeeRole() {
-
+    connection.query(middleMan.readEmployeesAndRoles(), (err, res) => {
+        if (err) throw err;
+        console.table(res)
+        const employeeChoices = res.map(({ employeeId, first_name, last_name }) =>
+            ({ value: employeeId, name: `${first_name} ${last_name}` }));
+        const roleChoices = res.map(({ roleId, title }) =>
+            ({ value: roleId, name: title }));
+        console.log(roleChoices)
+        inquirer
+            .prompt([
+                {
+                    type: 'list',
+                    name: 'employeeToChange',
+                    message: 'Which employee would you like to change?',
+                    choices: employeeChoices
+                },
+                {
+                    type: 'list',
+                    name: 'newRole',
+                    message: 'What new role would you like to give them?',
+                    choices: roleChoices
+                }
+            ]).then((answers) => {
+                console.log(answers)
+                connection.query(middleMan.updateEmployeeRole(),
+                    [answers.newRole, answers.employeeToChange], (err, res) => {
+                        if (err) throw err;
+                        console.log(res)
+                    })
+                console.log('Employee role updated');
+                init()
+            })
+    })
 };
 
 
