@@ -21,7 +21,7 @@ function init() {
                 type: 'list',
                 name: 'action',
                 message: 'What would you like to do with the workforce database?',
-                choices: ['Add_department', 'Add_role', 'Add_employee', 'View_departments', 'View_roles', 'View_employees', 'Update_employee_role', 'Quit']
+                choices: ['Add_department', 'Add_role', 'Add_employee', 'View_departments', 'View_roles', 'View_employees', 'Update_employee_role', 'Update_managers', 'View_employees_by_manager', 'Delete_department', 'Delete_role', 'Delete_employee', 'View_dept_salary_budget', 'Quit']
                 /*Update employee managers
                 View employees by manager
                 Delete departments, roles, and employees
@@ -50,6 +50,24 @@ function init() {
                     break;
                 case 'Update_employee_role':
                     updateEmployeeRole();
+                    break;
+                case 'Update_managers':
+                    updateManagers();
+                    break;
+                case 'View_employees_by_managers':
+                    viewEmployeeByManagers();
+                    break;
+                case 'Delete_department':
+                    deleteDepartment();
+                    break;
+                case 'Delete_role':
+                    deleteRole();
+                    break;
+                case 'Delete_employee':
+                    deleteEmployee();
+                    break;
+                case 'View_dept_salary_budget':
+                    viewDeptSalaryBudget();
                     break;
                 case 'Quit':
                     connection.end();
@@ -171,6 +189,14 @@ function viewEmployees() {
         init();
     })
 };
+//TODO
+function viewEmployeeByManagers() {
+
+};
+//TODO
+function viewDeptSalaryBudget() {
+
+};
 
 function updateEmployeeRole() {
     connection.query(middleMan.readEmployeesAndRoles(), (err, res) => {
@@ -207,7 +233,22 @@ function updateEmployeeRole() {
             })
     })
 };
+//TODO
+function updateManagers() {
 
+};
+//TODO
+function deleteDepartment() {
+
+};
+//TODO
+function deleteRole() {
+
+};
+//TODO
+function deleteEmployee() {
+
+};
 
 connection.connect((err) => {
     if (err) throw err;
