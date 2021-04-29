@@ -52,7 +52,7 @@ class Middleman {
     };
 
     updateManagers() {
-        return 'UPDATE emplyee SET manager_id = ? WHERE id = ?'
+        return 'UPDATE employee SET manager_id = ? WHERE id = ?'
     };
 
     destroyDepartment() {

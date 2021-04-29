@@ -54,7 +54,7 @@ function init() {
                 case 'Update_managers':
                     updateManagers();
                     break;
-                case 'View_employees_by_managers':
+                case 'View_employees_by_manager':
                     viewEmployeeByManagers();
                     break;
                 case 'Delete_department':
@@ -191,9 +191,34 @@ function viewEmployees() {
 };
 //TODO
 function viewEmployeeByManagers() {
-
-};
-//TODO
+    connection.query(middleMan.readEmployees(), (err, res) => {
+        if (err) throw err;
+        const managerChoices = res.filter(({ manager_id }) => {
+            if (manager_id) {
+                return false
+            } return true
+        }).map(({ id, first_name, last_name }) =>
+            ({ value: id, name: `${first_name} ${last_name}` }));
+            inquirer
+            .prompt([
+                {
+                    type: 'list',
+                    name: 'managerSelected',
+                    message: 'Choose a manager and we will desplay their employees',
+                    choices: managerChoices
+                }
+            ])
+                .then((answers) => {
+                console.log(answers.managerSelected)
+                connection.query(middleMan.readEmployeeByManager(), [answers.managerSelected], (err, res) => {
+                    if (err) throw err;
+                    console.table(res);
+                    init();
+                })
+            })
+        })
+        };
+        //TODO
 function viewDeptSalaryBudget() {
 
 };
