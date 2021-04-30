@@ -189,7 +189,7 @@ function viewEmployees() {
         init();
     })
 };
-//TODO
+
 function viewEmployeeByManagers() {
     connection.query(middleMan.readEmployees(), (err, res) => {
         if (err) throw err;
@@ -218,9 +218,29 @@ function viewEmployeeByManagers() {
             })
         })
         };
-        //TODO
+        
 function viewDeptSalaryBudget() {
-
+    connection.query(middleMan.readDepartments(), (err, res) => {
+        if (err) throw err;
+        const departmentChoices = res.map(({id, name}) => 
+            ({ value: id, name: name })
+        );
+        inquirer.prompt([
+               {
+                   type: 'list',
+                   name: 'departmentSelected',
+                   message: 'Choose a department and we will display their budget',
+                   choices: departmentChoices
+               }
+           ])
+            .then((answer) => {
+                connection.query(middleMan.readDeptSalaryBudget(), [answer.departmentSelected], (err, res) => {
+                    if (err) throw err;
+                    console.table(res);
+                    init();
+            })
+        }).catch((err) => { console.log(err)})
+    })
 };
 
 function updateEmployeeRole() {

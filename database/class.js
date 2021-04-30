@@ -32,7 +32,8 @@ class Middleman {
     };
 
     readDeptSalaryBudget() {
-        return 'SELECT SUM(role.salary) FROM department\
+        return 'SELECT department.name AS Department, SUM(role.salary) AS Budget\
+        FROM department\
         JOIN role\
         ON department.id = role.department_id\
         join employee\
