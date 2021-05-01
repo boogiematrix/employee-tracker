@@ -284,7 +284,28 @@ function updateManagers() {
 };
 //TODO
 function deleteDepartment() {
-
+    connection.query(middleMan.readDepartments(), (err, res) => {
+        if (err) throw err;
+        const departmentChoices = res.map(({ id, name }) =>
+            ({ value: id, name: name })
+        )
+        inquirer
+            .prompt([
+                {
+                    type: 'list',
+                    name: 'departmentSelected',
+                    message: 'Choose a department to delete',
+                    choices: departmentChoices
+                }
+            ])
+            .then((answer) => {
+                connection.query(middleMan.destroyDepartment(), [answer.departmentSelected], (err, res) => {
+                    if (err) throw err;
+                    console.log('Department successfully deleted');
+                    init();
+            })
+        })
+    })
 };
 //TODO
 function deleteRole() {
