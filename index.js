@@ -120,7 +120,7 @@ function addRole() {
         .then((answer) => {
 
             connection.query(middleMan.createRole(), {
-                title: answer.newDepartment,
+                title: answer.title,
                 salary: answer.salary,
                 department_id: answer.departmentId
             })
@@ -309,11 +309,53 @@ function deleteDepartment() {
 };
 //TODO
 function deleteRole() {
-
+    connection.query(middleMan.readRoles(), (err, res) => {
+        if (err) throw err;
+        const roleChoices = res.map(({ id, title }) =>
+            ({ value: id, name: title })
+        )
+        inquirer
+            .prompt([
+                {
+                    type: 'list',
+                    name: 'roleSelected',
+                    message: 'Choose a role to delete',
+                    choices: roleChoices
+                }
+            ])
+            .then((answer) => {
+                connection.query(middleMan.destroyRole(), [answer.roleSelected], (err, res) => {
+                    if (err) throw err;
+                    console.log('Role successfully deleted');
+                    init();
+                })
+            })
+    })
 };
 //TODO
 function deleteEmployee() {
-
+    connection.query(middleMan.readEmployees(), (err, res) => {
+        if (err) throw err;
+        const employeeChoices = res.map(({ id, first_name, last_name }) =>
+            ({ value: id, name: `${first_name} ${last_name}` })
+        )
+        inquirer
+            .prompt([
+                {
+                    type: 'list',
+                    name: 'employeeSelected',
+                    message: 'Choose an employee to delete',
+                    choices: employeeChoices
+                }
+            ])
+            .then((answer) => {
+                connection.query(middleMan.destroyEmployee(), [answer.employeeSelected], (err, res) => {
+                    if (err) throw err;
+                    console.log('Employee successfully deleted');
+                    init();
+                })
+            })
+    })
 };
 
 connection.connect((err) => {
