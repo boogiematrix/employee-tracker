@@ -204,7 +204,7 @@ function viewEmployeeByManagers() {
                 {
                     type: 'list',
                     name: 'managerSelected',
-                    message: 'Choose a manager and we will desplay their employees',
+                    message: 'Choose a manager and we will display their employees',
                     choices: managerChoices
                 }
             ])
@@ -280,8 +280,42 @@ function updateEmployeeRole() {
 };
 //TODO
 function updateManagers() {
-
-};
+    connection.query(middleMan.readEmployees(), (err, res) => {
+        if (err) throw err;
+        const managerChoices = res.filter(({ manager_id }) => {
+            if (manager_id) {
+                return false
+            } return true
+        }).map(({ id, first_name, last_name }) =>
+            ({ value: id, name: `${first_name} ${last_name}` }));
+        const employeeChoices = res.map(({ id, first_name, last_name }) =>
+            ({ value: id, name: `${first_name} ${last_name}` }));
+        inquirer
+            .prompt([
+                {
+                    type: 'list',
+                    name: 'employeeToChange',
+                    message: 'Which employee would you like to change?',
+                    choices: employeeChoices
+                },
+                {
+                    type: 'list',
+                    name: 'newManager',
+                    message: 'What new manager would you like to give them?',
+                    choices: managerChoices
+                }
+            ]).then((answers) => {
+                console.log(answers)
+                connection.query(middleMan.updateManagers(),
+                    [answers.newManager, answers.employeeToChange], (err, res) => {
+                        if (err) throw err;
+                        console.log(res)
+                    })
+                console.log('Employee manager updated');
+                init()
+            })
+    });
+}
 //TODO
 function deleteDepartment() {
     connection.query(middleMan.readDepartments(), (err, res) => {
