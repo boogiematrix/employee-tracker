@@ -1,19 +1,19 @@
+require('dotenv').config();
 const inquirer = require('inquirer');
 const mysql = require('mysql');
 const middleMan = require('./database/class')
 const cTable = require('console.table');
-
 const connection = mysql.createConnection({
     host: 'localhost',
 
     port: 3306,
 
-    user: 'root',
+    user: process.env.DB_USER,
 
-    password: 'mingmang0',
+    password: process.env.DB_PASSWORD,
     database: 'workforce',
 });
-
+//initial function providing a base menu of options
 function init() {
     inquirer
         .prompt([
@@ -22,10 +22,6 @@ function init() {
                 name: 'action',
                 message: 'What would you like to do with the workforce database?',
                 choices: ['Add_department', 'Add_role', 'Add_employee', 'View_departments', 'View_roles', 'View_employees', 'Update_employee_role', 'Update_managers', 'View_employees_by_manager', 'Delete_department', 'Delete_role', 'Delete_employee', 'View_dept_salary_budget', 'Quit']
-                /*Update employee managers
-                View employees by manager
-                Delete departments, roles, and employees
-                View the total utilized budget of a department -- ie the combined salaries of all employees in that department */
             }
         ])
         .then((answer) => {
@@ -89,7 +85,6 @@ function addDepartment() {
         }
         ])
         .then((answer) => {
-        
             connection.query(middleMan.createDepartment(), {
                 name: answer.newDepartment
             })
@@ -118,7 +113,6 @@ function addRole() {
             }
         ])
         .then((answer) => {
-
             connection.query(middleMan.createRole(), {
                 title: answer.title,
                 salary: answer.salary,
@@ -154,7 +148,6 @@ function addEmployee() {
             }
         ])
         .then((answer) => {
-
             connection.query(middleMan.createEmployee(), {
                 first_name: answer.firstName,
                 last_name: answer.lastName,
@@ -193,6 +186,8 @@ function viewEmployees() {
 function viewEmployeeByManagers() {
     connection.query(middleMan.readEmployees(), (err, res) => {
         if (err) throw err;
+        //create an object of managers whose ids match their employees manager_id 
+        //they have a null value for manager_id
         const managerChoices = res.filter(({ manager_id }) => {
             if (manager_id) {
                 return false
@@ -278,7 +273,7 @@ function updateEmployeeRole() {
             })
     })
 };
-//TODO
+
 function updateManagers() {
     connection.query(middleMan.readEmployees(), (err, res) => {
         if (err) throw err;
@@ -316,7 +311,7 @@ function updateManagers() {
             })
     });
 }
-//TODO
+
 function deleteDepartment() {
     connection.query(middleMan.readDepartments(), (err, res) => {
         if (err) throw err;
@@ -341,7 +336,7 @@ function deleteDepartment() {
         })
     })
 };
-//TODO
+
 function deleteRole() {
     connection.query(middleMan.readRoles(), (err, res) => {
         if (err) throw err;
@@ -366,7 +361,7 @@ function deleteRole() {
             })
     })
 };
-//TODO
+
 function deleteEmployee() {
     connection.query(middleMan.readEmployees(), (err, res) => {
         if (err) throw err;
