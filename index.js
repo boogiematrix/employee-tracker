@@ -204,7 +204,6 @@ function viewEmployeeByManagers() {
                 }
             ])
                 .then((answers) => {
-                console.log(answers.managerSelected)
                 connection.query(middleMan.readEmployeeByManager(), [answers.managerSelected], (err, res) => {
                     if (err) throw err;
                     console.table(res);
@@ -241,12 +240,10 @@ function viewDeptSalaryBudget() {
 function updateEmployeeRole() {
     connection.query(middleMan.readEmployeesAndRoles(), (err, res) => {
         if (err) throw err;
-        console.table(res)
         const employeeChoices = res.map(({ employeeId, first_name, last_name }) =>
             ({ value: employeeId, name: `${first_name} ${last_name}` }));
         const roleChoices = res.map(({ roleId, title }) =>
             ({ value: roleId, name: title }));
-        console.log(roleChoices)
         inquirer
             .prompt([
                 {
@@ -262,14 +259,12 @@ function updateEmployeeRole() {
                     choices: roleChoices
                 }
             ]).then((answers) => {
-                console.log(answers)
                 connection.query(middleMan.updateEmployeeRole(),
                     [answers.newRole, answers.employeeToChange], (err, res) => {
                         if (err) throw err;
-                        console.log(res)
+                        console.log('Employee role updated');
+                        init()
                     })
-                console.log('Employee role updated');
-                init()
             })
     })
 };
@@ -300,14 +295,12 @@ function updateManagers() {
                     choices: managerChoices
                 }
             ]).then((answers) => {
-                console.log(answers)
                 connection.query(middleMan.updateManagers(),
                     [answers.newManager, answers.employeeToChange], (err, res) => {
                         if (err) throw err;
-                        console.log(res)
+                        console.log('Employee manager updated');
+                        init()
                     })
-                console.log('Employee manager updated');
-                init()
             })
     });
 }
