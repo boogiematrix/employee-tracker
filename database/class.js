@@ -24,7 +24,15 @@ class Middleman {
     };
     //used in viewEmployee()
     readEmployees() {
-        return 'SELECT * FROM employee'
+        return 'SELECT employee.id AS id, employee.first_name AS first_name,\
+         employee.last_name AS last_name, role.title AS title, department.name AS department,\
+        role.salary AS salary\
+        FROM department\
+        JOIN role\
+        ON department.id = role.department_id\
+        join employee\
+        ON role.id = employee.role_id\
+        ORDER BY id;'
     };
     //used in viewEmployeeByManager()
     readEmployeeByManager() {
