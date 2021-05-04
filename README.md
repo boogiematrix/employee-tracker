@@ -4,7 +4,7 @@
   <br/>
 
   ## Usage
-  Just fork the repository over and clone it down. Do an npm init and npm i in the terminal, then node index.js and you should be good to go. I've also included a video if you'd rather not bother with all that.
+  Just fork the repository over and clone it down. Enter your database info into the .env file, do an npm init and npm i in the terminal, then node index.js and you should be good to go. I've also included a video if you'd rather not bother with all that.
 
   ![Sample](https://github.com/boogiematrix/employee-tracker/blob/main/Assets/pictures/employee-tracker-screenshot.png)
 
